@@ -1,0 +1,93 @@
+﻿@model SoftwareSellingCA.Models.PurchaseFinal
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/purchase.css"/>
+    <script src="~/js/purchase.js"></script>
+}
+
+@{
+    List<ActivationCodeProductCustomer> listOfConfirmedProductCust = (List<ActivationCodeProductCustomer>)Model.ActivationCodeProducts;
+    var groupedActivationCodes = listOfConfirmedProductCust.GroupBy(ac => ac.ProductId)
+                                                            .ToDictionary(g => g.Key, g => g.ToList());
+}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <a class="navbar-brand" href="@Url.Action("Index", "Browse")">
+        <img src="~/photoes/brand_logo.jpg" alt="Bootstrap" width="40" height="40">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active fs-5 me-3" aria-current="page">My Purchases</a>
+            </li>
+            <li class="nav-item">
+                <form method="post" action="@Url.Action("Index", "Logout")">
+                    <button class="btn btn-link nav-link active" aria-current="page" type="submit">Log Out</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@if (listOfConfirmedProductCust != null && listOfConfirmedProductCust.Count != 0)
+{
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="cartedProduct">
+        @foreach (var productGroup in groupedActivationCodes)
+        {
+            var productId = productGroup.Key;
+            var activationCodes = productGroup.Value;
+
+            MyDbContext db = new MyDbContext();
+            var product = db.productsData.FirstOrDefault(p => p.ProductId == productId);
+
+            if (product != null)
+            {
+                string imageLocation = Url.Content("~/photoes/" + product.PhotoPath);
+                <div class="card mb-4" style="width: 600px;">
+                    <div class="row g-0">
+                        <!-- Left side: Photo, Name, and Description -->
+                        <div class="col-md-6 col-6">
+                            <img src="@imageLocation" alt="@product.ProductName" class="card-img-top mb-3">
+                            <h5 class="card-title text-center">@product.ProductName</h5>
+                            <p class="card-text" style="font-size: 14px;">@product.Description</p>
+                            <div class="text-center">
+                                <button class="btn btn-primary">Download</button>
+                            </div>
+                        </div>
+
+                            <!-- Right side: Purchased time /quantity and activation code -->
+                        <div class="col-md-6 col-6 d-flex flex-column justify-content-between">
+                            <div class="text-center mt-3 mb-3 flex-grow-1">
+                                <p class="card-date mb-0" style="margin-top:50px;">Purchased On : @DateTimeOffset.FromUnixTimeSeconds(activationCodes.First().PurchaseDateUnix).ToString("d MMM yyyy")</p>
+                            </div>
+                            <div class="text-center mt-3 mb-3 flex-grow-1">
+                                <p class="card-count mb-0" style="margin-top:50px;">Quantity : @activationCodes.Count</p>
+                            </div>
+                            <div class="text-center mt-3 mb-3 flex-grow-1">
+                                <p class="card-price mb-0" style="margin-top:50px;">Activation Codes :</p>
+                                <!-- Dropdown for activation codes -->
+                                <select class="form-select mt-2" aria-label="Activation Options">
+                                    @foreach (var code in activationCodes)
+                                    {
+                                        <option>@code.ActivateCode</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    </div>
+}
+else
+{
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2>You don't have any purchases with us yet!</h2>
+            <p class="lead">Head right over to <a href="@Url.Action("Index", "Browse")">the gallery</a> to shop for more products!</p>
+        </div>
+    </div>
+}
+

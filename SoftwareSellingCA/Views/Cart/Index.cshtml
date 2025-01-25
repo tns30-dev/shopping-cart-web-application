@@ -1,0 +1,146 @@
+﻿@* Cart *@
+@model SoftwareSellingCA.Models.CartViewModel;
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/cart.css" />
+    <script src="~/js/cart.js"></script>
+}
+
+@{
+    List<ProductClick> cartedList = (List<ProductClick>)@Model.CartedProducts;
+}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <a class="navbar-brand" href="@Url.Action("Index", "Browse")">
+        <img src="~/photoes/brand_logo.jpg" alt="Bootstrap" width="40" height="40">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active fs-5 me-3" aria-current="page">View Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 me-3" href="@Url.Action("Index", "Browse")">Continue Shopping</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5" href="@Url.Action("CheckOut", "Purchase")">Checkout</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <b class="fs-5" id="totalAmount">Total : $0.00</b>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="cartedProduct">
+        @for (int i = 0; i < cartedList.Count; i++)
+        {
+            var currentProductClick = cartedList[i];
+            <input type="hidden" value="@currentProductClick.Product.Price" id="priceOfCurrentProduct-@i">
+            string imageLocation = Url.Content("~/photoes/" + currentProductClick.Product.PhotoPath);
+
+            <div class="card mb-4" style="width: 600px;">
+                <div class="row g-0">
+                    <!-- Left side: Photo, Name, and Description -->
+                    <div class="col-md-6 col-6">
+                        <img src="@imageLocation" alt="@currentProductClick.Product.ProductName" class="card-img-top mb-3">
+                        <h5 class="card-title text-center">@currentProductClick.Product.ProductName</h5>
+                        <p class="card-text" style="font-size: 14px;">@currentProductClick.Product.Description</p>
+                    </div>
+
+                    <!-- Right side: Price and Quantity -->
+                    <div class="col-md-6 col-6 d-flex flex-column justify-content-between">
+                        <!-- Vertically and horizontally aligning content -->
+                        <div class="text-center mt-3 mb-3 flex-grow-1">
+                            <p class="card-price mb-0" style="margin-top:50px;"><b style="font-size : 25px;">Price: $@currentProductClick.Product.Price</b></p>
+                        </div>
+                        <input type="hidden" value="@currentProductClick.Product.Price" id="priceOfProduct-@currentProductClick.Product.ProductId">
+
+                        <div class="d-flex flex-column align-items-center mb-3 mt-3 flex-grow-1">
+                            <!-- Added margin top and bottom -->
+                            <label class="card-quantity mb-0 form-label" style="font-size : 25px;">Quantity</label>
+                            <!-- Dropdown for quantity -->
+                            <select class="form-select mt-2" aria-label="Quantity" id="quantityDropdown-@i" data-product-id="@cartedList[i].Product.ProductId">
+                                @for (int j = 1; j <= 10; j++)
+                                {
+                                    if (j == currentProductClick.Click)
+                                    {
+                                        <option selected class="text-center">@currentProductClick.Click</option>
+                                    }
+                                    else
+                                    {
+                                        <option class="text-center">@j</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+
+    window.addEventListener("load", function () {
+        handleTotalAmount();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let dropdowns = document.querySelectorAll('[id^="quantityDropdown-"]');
+
+        dropdowns.forEach((dropdown) => {
+            dropdown.addEventListener("change", function () {
+                let productQuantity = parseInt(dropdown.value);
+                let productId = dropdown.getAttribute("data-product-id");
+
+                // Call the UpdateQuantity action method
+                updateQuantity(productId, productQuantity);
+
+                handleTotalAmount();
+            });
+        });
+    });
+
+    //bored to retrive the data from the form and do ajax thing
+    function updateQuantity(productId, quantity) {
+        let formData = new FormData();
+        formData.append('productId', productId);
+        formData.append('quantity', quantity);
+
+        fetch('/Cart/UpdateQuantity', {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Quantity updated successfully');
+                } else {
+                    console.error('Failed to update quantity');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    function handleTotalAmount() {
+        let totalAmount = 0;
+
+        for (let i = 0; i < @cartedList.Count; i++) {
+            let price = parseFloat(document.getElementById("priceOfCurrentProduct-" + i).value);
+            let quantity = parseInt(document.getElementById("quantityDropdown-" + i).value);
+
+            let productTotal = price * quantity;
+            totalAmount += productTotal;
+        }
+
+        document.getElementById("totalAmount").innerText = "Total : $" + totalAmount.toFixed(2);
+    }
+</script>

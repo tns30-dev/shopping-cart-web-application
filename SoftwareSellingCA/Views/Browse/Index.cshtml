@@ -1,0 +1,88 @@
+﻿@* Browse *@
+@model SoftwareSellingCA.Models.ProductListM;
+
+@{
+    ViewData["Title"] = "Index";
+    List<Product> productList = (List<Product>)@Model.Products;
+    string dataInSearch = (string)ViewData["stringInSearch"];
+    int currentCount = (int)ViewData["currentCount"];
+    string username = (string)ViewData["currentUser"];
+    bool searchFound = (bool)ViewData["searchFound"];
+}
+
+@section Scripts {
+    <link rel="stylesheet" href="~/css/browse.css"/>
+    <script src="~/js/browse.js"></script>
+}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary m-2">
+    <a class="navbar-brand" href="#">
+        <img src="~/photoes/brand_logo.jpg" width="40" height="40">
+    </a>
+    @if (username == null)
+    {
+        <b class="navbar-brand">Hello! Customer</b>
+    }
+    else
+    {
+        <b class="navbar-brand">Hello! @username</b>
+    }
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+        @if (username != null)
+        {
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <form method="post" action="@Url.Action("Index", "Purchase")">
+                        <button class="btn btn-link nav-link active" aria-current="page" type="submit">My Purchase</button>
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="@Url.Action("Index", "Logout")">
+                        <button class="btn btn-link nav-link active" aria-current="page" type="submit">Log Out</button>
+                    </form>
+                </li>
+            </ul>
+        }
+        <form class="d-flex" role="search" style="margin-right: 200px;" method="post" action="@Url.Action("Search", "Browse")">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="width:550px;" name="searchTerm" id="searchS" value="@dataInSearch">
+            <button class="btn btn-outline-success" type="submit" id="searchButton">Search</button>
+        </form>
+    </div>
+    <a href="@Url.Action("Index","Cart")">
+        <div class="cart-icon" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+            <img src="~/photoes/iconcart.png" alt="Shopping Cart">
+            <span class="cart-count">@currentCount</span>
+        </div>
+    </a>
+</nav>
+
+@if(searchFound == true)
+{
+    <div class="listProduct">
+    @for (int i = 0; i < productList.Count; i++)
+    {
+        string imageLocation = Url.Content("~/photoes/" + productList[i].PhotoPath);
+
+        <div class="card">
+            <img src="@imageLocation" alt="@productList[i].ProductName" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@productList[i].ProductName</h5>
+                <p class="card-text">@productList[i].Description</p>
+                <p class="card-price"><b>Price : $@productList[i].Price</b></p>
+
+                <!-- Add to Cart button with AJAX -->
+                <button class="card-button" onclick="addToCart('@productList[i].ProductId')">Add to Cart</button>
+            </div>
+        </div>
+    }
+    </div>
+}
+else
+{
+    <div>We did not find anything relating to @dataInSearch</div>
+}
+

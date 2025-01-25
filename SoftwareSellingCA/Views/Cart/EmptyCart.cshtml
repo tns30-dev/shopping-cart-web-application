@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "EmptyCart";
+}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <a class="navbar-brand" href="@Url.Action("Index", "Browse")">
+        <img src="~/photoes/brand_logo.jpg" alt="Bootstrap" width="40" height="40">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active fs-5 me-3" aria-current="page">View Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 me-3" href="@Url.Action("Index", "Browse")">Continue Shopping</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5" href="@Url.Action("CheckOut", "Purchase")">Checkout</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <b class="fs-5" id="totalAmount">Total : $0.00</b>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2>Your cart is empty!</h2>
+            <p class="lead">Head right over to <a href="@Url.Action("Index", "Browse")">the gallery</a> to shop for more products!</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <img src="~/photoes/empty_cart.jpg" alt="Empty Cart" class="img-fluid" style="max-width: 400px;">
+        </div>
+    </div>
+</div>

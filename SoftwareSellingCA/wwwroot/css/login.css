@@ -1,0 +1,79 @@
+﻿.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: red; 
+    color: white;
+}
+
+#carouselExample {
+    width: 50%;
+    height: 400px;
+    margin-right: 20px;
+}
+
+body {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.nav-item{
+    margin : 30px;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    flex : 1;
+}
+
+
+#login-form-container {
+   width : 50%;
+}
+
+.login-form {
+    width: 400px;
+    height: 330px;
+    border: 1px solid aliceblue;
+    background-color: #f5fffa;
+    border-radius: 15px;
+}
+
+
+.form-label {
+    display: block; 
+    margin-bottom: 8px; 
+    
+}
+.form-group {
+    margin-bottom: 20px; 
+}
+
+.form-input {
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+}
+
+.btn {
+    margin-left : 100px;
+}
+
+.btn-above {
+    margin-top: 200px;
+}
+
+#errorMessage{
+    color : red;
+}
+
+#slogan {
+    font-family: sans-serif;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+

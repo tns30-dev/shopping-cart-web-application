@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    int newItemsCount = (int)ViewData["newCheckOutItems"];
+}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <a class="navbar-brand" href="@Url.Action("Index", "Browse")">
+        <img src="~/photoes/brand_logo.jpg" alt="Bootstrap" width="40" height="40">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav flex-grow-1 me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link fs-5 me-3" href="@Url.Action("Index", "Browse")">Continue Shopping</a>
+            </li>
+            <li class="nav-item">
+                <form method="post" action="@Url.Action("Index", "Purchase")">
+                    <button class="btn btn-link nav-link active" aria-current="page" type="submit">My Purchases</button>
+                </form>
+            </li>
+            <li class="nav-item">
+                <form method="post" action="@Url.Action("Index", "Logout")">
+                    <button class="btn btn-link nav-link active" aria-current="page" type="submit">Log Out</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+@if(newItemsCount == 0)
+{
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <p>You don't have any items in your cart to check out!</p>
+            <p>Head right over to <a href="@Url.Action("Index", "Browse")">the gallery</a> to shop for more products!</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <img src="~/photoes/noproductinthecart.jpg" alt="Checkout Unsuccessful" class="img-fluid" style="max-width: 400px;">
+        </div>
+    </div>
+</div>
+}
+else if(newItemsCount == 1)
+{
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2>Checkout success!</h2>
+            <p>You have purchased @newItemsCount item!</p>
+            <p>Thank you for shopping with us!</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <img src="~/photoes/checkout.jpg" alt="Checkout Success" class="img-fluid" style="max-width: 400px;">
+        </div>
+    </div>
+</div>
+
+}
+else
+{
+    <div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+                <h2>Checkout success!</h2>
+                <p>You have purchased @newItemsCount items!</p>
+                <p>Thank you for shopping with us!</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <img src="~/photoes/checkout.jpg" alt="Checkout Success" class="img-fluid" style="max-width: 400px;">
+        </div>
+    </div>
+</div>
+}
+
