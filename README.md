@@ -37,7 +37,7 @@ The Shopping Cart Web Application is a the project designed for managing and pur
    ```
 2. Navigate to the project directory:
    ```bash
-   cd ShoppingCartWebApp
+   cd SoftwareSellingCA
    ```
 3. Update the database connection string in `MyDbContext.cs`:
    ```csharp
@@ -62,4 +62,11 @@ The Shopping Cart Web Application is a the project designed for managing and pur
    - Username: `chris`, Password: `chris123`
    - Username: `emily`, Password: `emily123`
 3. Explore product details, manage the product cart, view customer purchasing history, and products search bar.
+
+## Credits
+
+1.Built by Thet Naung Soe and Soh Yong Sheng.
+2.Submitted as module project for NUS-ISS Graduate Certificate in Enterprise Solutions Development.
+
+
 
