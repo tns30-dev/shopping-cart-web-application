@@ -65,8 +65,8 @@ The Shopping Cart Web Application is a the project designed for managing and pur
 
 ## Credits
 
-1.Built by Thet Naung Soe and Soh Yong Sheng.
-2.Submitted as module project for NUS-ISS Graduate Certificate in Enterprise Solutions Development.
+1. Built by Thet Naung Soe and Soh Yong Sheng.
+2. Submitted as module project for NUS-ISS Graduate Certificate in Enterprise Solutions Development.
 
 
 
